@@ -102,6 +102,22 @@ function Dashboard() {
     });
   }, [tasks, statusFilter, priorityFilter, search]);
 
+  const reminders = useMemo(() => {
+    const list = tasks.filter((t) => t.status !== "done" && (isOverdue(t) || isDueSoon(t)) && !dismissed.includes(t.id));
+    return list.sort((a, b) => {
+      const aOver = isOverdue(a) ? 0 : 1;
+      const bOver = isOverdue(b) ? 0 : 1;
+      if (aOver !== bOver) return aOver - bOver;
+      return new Date(a.due_date || 0).getTime() - new Date(b.due_date || 0).getTime();
+    });
+  }, [tasks, dismissed]);
+
+  const dismiss = (id: string) => {
+    const next = [...dismissed, id];
+    setDismissed(next);
+    localStorage.setItem("tc_dismissed", JSON.stringify(next));
+  };
+
   const handleSave = async (input: TaskInput, subtasks: string[]) => {
     try {
       if (editing) await updateTask(editing.id, input);
