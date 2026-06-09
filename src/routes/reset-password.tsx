@@ -9,6 +9,23 @@ import { Loader2 } from "lucide-react";
 
 export const Route = createFileRoute("/reset-password")({
   ssr: false,
+  head: () => ({
+    meta: [
+      { title: "Reset Password — CogniFlow" },
+      {
+        name: "description",
+        content:
+          "Securely update your CogniFlow account password and regain access to your smart task manager.",
+      },
+      { property: "og:title", content: "Reset Password — CogniFlow" },
+      {
+        property: "og:description",
+        content:
+          "Securely update your CogniFlow account password and regain access to your smart task manager.",
+      },
+      { name: "robots", content: "noindex" },
+    ],
+  }),
   component: ResetPassword,
 });
 
