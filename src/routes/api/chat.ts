@@ -65,11 +65,11 @@ export const Route = createFileRoute("/api/chat")({
           create_task: tool({
             description: "Create a new task for the user.",
             inputSchema: z.object({
-              title: z.string().min(1),
-              description: z.string().optional(),
-              category: z.string().optional(),
+              title: z.string().min(1).max(200),
+              description: z.string().max(5000).optional(),
+              category: z.string().max(100).optional(),
               priority: z.enum(["low", "medium", "high"]).default("medium"),
-              due_date: z.string().optional().describe("ISO 8601 datetime"),
+              due_date: z.string().max(40).optional().describe("ISO 8601 datetime"),
             }),
             execute: async (input) => {
               const { data, error } = await supabase
