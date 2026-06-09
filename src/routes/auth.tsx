@@ -55,7 +55,8 @@ function AuthPage() {
         navigate({ to: "/app" });
       }
     } catch (err) {
-      toast.error(err instanceof Error ? err.message : "Authentication failed");
+      console.error("Auth error", err);
+      toast.error("Sign-in failed. Check your details and try again.");
     } finally {
       setLoading(false);
     }
