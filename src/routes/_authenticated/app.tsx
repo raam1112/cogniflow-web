@@ -240,6 +240,37 @@ function Dashboard() {
           <StatCard icon={<CircleCheck className="h-4 w-4" />} label="Completed" value={String(stats.done)} />
         </div>
 
+        {/* Deadline Reminders */}
+        {reminders.length > 0 && (
+          <div className="mt-6 border-2 border-destructive bg-card p-4">
+            <div className="mb-3 flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <AlertTriangle className="h-4 w-4 text-destructive" />
+                <span className="text-xs font-bold uppercase tracking-widest text-destructive">Deadline Reminders</span>
+              </div>
+              <button className="text-xs text-muted-foreground hover:text-foreground" onClick={() => reminders.forEach((r) => dismiss(r.id))}>
+                Dismiss all
+              </button>
+            </div>
+            <div className="grid gap-2 sm:grid-cols-2 lg:grid-cols-3">
+              {reminders.map((t) => (
+                <div key={t.id} className="flex items-center gap-2 border border-border bg-background p-2">
+                  <div className={`h-2 w-2 shrink-0 rounded-full ${isOverdue(t) ? "bg-destructive" : "bg-brand"}`} />
+                  <button className="flex-1 text-left" onClick={() => { setEditing(t); setModalOpen(true); }}>
+                    <div className="text-sm font-medium">{t.title}</div>
+                    <div className="text-xs text-muted-foreground">
+                      {isOverdue(t) ? "Overdue" : "Due soon"} · {format(new Date(t.due_date || 0), "MMM d, HH:mm")}
+                    </div>
+                  </button>
+                  <button className="text-muted-foreground hover:text-foreground" onClick={() => dismiss(t.id)} title="Dismiss">
+                    <X className="h-3.5 w-3.5" />
+                  </button>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
         <div className="mt-6 grid gap-6 lg:grid-cols-3">
           {/* Stream */}
           <div className="lg:col-span-2">
