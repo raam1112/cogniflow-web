@@ -98,7 +98,7 @@ export function ChatPanel({ open, onOpenChange }: { open: boolean; onOpenChange:
             placeholder="Ask the assistant…"
             disabled={isLoading}
           />
-          <Button type="submit" size="icon" disabled={isLoading || !input.trim()} className="btn-brutal">
+          <Button type="submit" size="icon" disabled={isLoading || !input.trim()} className="btn-brutal" aria-label="Send message">
             <Send className="h-4 w-4" />
           </Button>
         </form>
