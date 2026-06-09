@@ -86,7 +86,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "CogniFlow" },
+      { title: "CogniFlow — Smart Task Manager" },
       { name: "description", content: "CogniFlow the Smart Task Manager Web Application is designed to help users efficiently organize, track, and manage their daily tasks." },
       { name: "author", content: "Lovable" },
       { property: "og:title", content: "CogniFlow" },
