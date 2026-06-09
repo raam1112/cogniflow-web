@@ -4,7 +4,7 @@ import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 import {
   CheckSquare, Plus, Search, Sun, Moon, LogOut, Bot, AlertTriangle,
-  Clock, CircleCheck, ListTodo, Square,
+  Clock, CircleCheck, ListTodo, Square, Bell, X,
 } from "lucide-react";
 import { format } from "date-fns";
 
@@ -24,6 +24,9 @@ import { Progress } from "@/components/ui/progress";
 import {
   Select, SelectContent, SelectItem, SelectTrigger, SelectValue,
 } from "@/components/ui/select";
+import {
+  Popover, PopoverContent, PopoverTrigger,
+} from "@/components/ui/popover";
 
 export const Route = createFileRoute("/_authenticated/app")({
   head: () => ({ meta: [{ title: "Dashboard — TaskCore" }] }),
@@ -59,6 +62,10 @@ function Dashboard() {
   const [search, setSearch] = useState("");
   const [statusFilter, setStatusFilter] = useState("all");
   const [priorityFilter, setPriorityFilter] = useState("all");
+  const [dismissed, setDismissed] = useState<string[]>(() => {
+    try { return JSON.parse(localStorage.getItem("tc_dismissed") || "[]"); } catch { return []; }
+  });
+  const [remOpen, setRemOpen] = useState(false);
 
   const { data: tasks = [], isLoading } = useQuery({ queryKey: ["tasks"], queryFn: fetchTasks });
 
@@ -94,6 +101,22 @@ function Dashboard() {
       return true;
     });
   }, [tasks, statusFilter, priorityFilter, search]);
+
+  const reminders = useMemo(() => {
+    const list = tasks.filter((t) => t.status !== "done" && (isOverdue(t) || isDueSoon(t)) && !dismissed.includes(t.id));
+    return list.sort((a, b) => {
+      const aOver = isOverdue(a) ? 0 : 1;
+      const bOver = isOverdue(b) ? 0 : 1;
+      if (aOver !== bOver) return aOver - bOver;
+      return new Date(a.due_date || 0).getTime() - new Date(b.due_date || 0).getTime();
+    });
+  }, [tasks, dismissed]);
+
+  const dismiss = (id: string) => {
+    const next = [...dismissed, id];
+    setDismissed(next);
+    localStorage.setItem("tc_dismissed", JSON.stringify(next));
+  };
 
   const handleSave = async (input: TaskInput, subtasks: string[]) => {
     try {
@@ -136,6 +159,48 @@ function Dashboard() {
             <Badge variant="outline" className="ml-2 hidden border-brand text-brand sm:inline-flex">System Active</Badge>
           </div>
           <div className="flex items-center gap-2">
+            <Popover open={remOpen} onOpenChange={setRemOpen}>
+              <PopoverTrigger asChild>
+                <Button variant="outline" size="icon" className="relative" title="Reminders">
+                  <Bell className="h-4 w-4" />
+                  {reminders.length > 0 && (
+                    <span className="absolute -right-1 -top-1 flex h-4 min-w-[16px] items-center justify-center rounded-full bg-destructive px-1 text-[10px] font-bold text-destructive-foreground">
+                      {reminders.length}
+                    </span>
+                  )}
+                </Button>
+              </PopoverTrigger>
+              <PopoverContent align="end" className="w-80 border-2 border-border bg-card p-0">
+                <div className="flex items-center justify-between border-b-2 border-border px-3 py-2">
+                  <span className="text-xs font-bold uppercase tracking-widest">Reminders</span>
+                  {reminders.length > 0 && (
+                    <button className="text-xs text-muted-foreground hover:text-foreground" onClick={() => { reminders.forEach((r) => dismiss(r.id)); setRemOpen(false); }}>
+                      Dismiss all
+                    </button>
+                  )}
+                </div>
+                {reminders.length === 0 ? (
+                  <div className="px-3 py-4 text-sm text-muted-foreground">No urgent deadlines.</div>
+                ) : (
+                  <ul className="max-h-72 overflow-auto">
+                    {reminders.map((t) => (
+                      <li key={t.id} className="flex items-start gap-2 border-b border-border px-3 py-2 last:border-b-0">
+                        <div className={`mt-1 h-2 w-2 shrink-0 rounded-full ${isOverdue(t) ? "bg-destructive" : "bg-brand"}`} />
+                        <button className="flex-1 text-left text-sm" onClick={() => { setEditing(t); setModalOpen(true); setRemOpen(false); }}>
+                          <span className="font-medium">{t.title}</span>
+                          <div className="mt-0.5 text-xs text-muted-foreground">
+                            {isOverdue(t) ? "Overdue" : "Due soon"} · {format(new Date(t.due_date || 0), "MMM d, HH:mm")}
+                          </div>
+                        </button>
+                        <button className="text-muted-foreground hover:text-foreground" onClick={() => dismiss(t.id)} title="Dismiss">
+                          <X className="h-3.5 w-3.5" />
+                        </button>
+                      </li>
+                    ))}
+                  </ul>
+                )}
+              </PopoverContent>
+            </Popover>
             <Button variant="outline" size="icon" onClick={() => setChatOpen(true)} title="AI Assistant">
               <Bot className="h-4 w-4" />
             </Button>
@@ -174,6 +239,37 @@ function Dashboard() {
           <StatCard icon={<AlertTriangle className="h-4 w-4" />} label="Overdue" value={String(stats.overdue)} />
           <StatCard icon={<CircleCheck className="h-4 w-4" />} label="Completed" value={String(stats.done)} />
         </div>
+
+        {/* Deadline Reminders */}
+        {reminders.length > 0 && (
+          <div className="mt-6 border-2 border-destructive bg-card p-4">
+            <div className="mb-3 flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <AlertTriangle className="h-4 w-4 text-destructive" />
+                <span className="text-xs font-bold uppercase tracking-widest text-destructive">Deadline Reminders</span>
+              </div>
+              <button className="text-xs text-muted-foreground hover:text-foreground" onClick={() => reminders.forEach((r) => dismiss(r.id))}>
+                Dismiss all
+              </button>
+            </div>
+            <div className="grid gap-2 sm:grid-cols-2 lg:grid-cols-3">
+              {reminders.map((t) => (
+                <div key={t.id} className="flex items-center gap-2 border border-border bg-background p-2">
+                  <div className={`h-2 w-2 shrink-0 rounded-full ${isOverdue(t) ? "bg-destructive" : "bg-brand"}`} />
+                  <button className="flex-1 text-left" onClick={() => { setEditing(t); setModalOpen(true); }}>
+                    <div className="text-sm font-medium">{t.title}</div>
+                    <div className="text-xs text-muted-foreground">
+                      {isOverdue(t) ? "Overdue" : "Due soon"} · {format(new Date(t.due_date || 0), "MMM d, HH:mm")}
+                    </div>
+                  </button>
+                  <button className="text-muted-foreground hover:text-foreground" onClick={() => dismiss(t.id)} title="Dismiss">
+                    <X className="h-3.5 w-3.5" />
+                  </button>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
 
         <div className="mt-6 grid gap-6 lg:grid-cols-3">
           {/* Stream */}
