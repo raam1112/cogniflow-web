@@ -12,8 +12,8 @@ export const Route = createFileRoute("/auth")({
   ssr: false,
   head: () => ({
     meta: [
-      { title: "Sign in — TaskCore" },
-      { name: "description", content: "Sign in or create an account to manage your tasks with TaskCore." },
+      { title: "Sign in — CogniFlow" },
+      { name: "description", content: "Sign in or create an account to manage your tasks with CogniFlow." },
     ],
   }),
   component: AuthPage,
@@ -109,18 +109,42 @@ function AuthPage() {
             {mode === "signup" && (
               <div className="space-y-1.5">
                 <Label htmlFor="name">Display name</Label>
-                <Input id="name" value={displayName} onChange={(e) => setDisplayName(e.target.value)} placeholder="Ada Lovelace" />
+                <Input
+                  id="name"
+                  value={displayName}
+                  onChange={(e) => setDisplayName(e.target.value)}
+                  placeholder="Ada Lovelace"
+                />
               </div>
             )}
             <div className="space-y-1.5">
               <Label htmlFor="email">Email</Label>
-              <Input id="email" type="email" required value={email} onChange={(e) => setEmail(e.target.value)} placeholder="you@example.com" />
+              <Input
+                id="email"
+                type="email"
+                required
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder="you@example.com"
+              />
             </div>
             <div className="space-y-1.5">
               <Label htmlFor="password">Password</Label>
-              <Input id="password" type="password" required minLength={6} value={password} onChange={(e) => setPassword(e.target.value)} placeholder="••••••••" />
+              <Input
+                id="password"
+                type="password"
+                required
+                minLength={6}
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                placeholder="••••••••"
+              />
             </div>
-            <Button type="submit" disabled={loading} className="w-full font-display font-bold uppercase tracking-wide btn-brutal">
+            <Button
+              type="submit"
+              disabled={loading}
+              className="w-full font-display font-bold uppercase tracking-wide btn-brutal"
+            >
               {loading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
               {mode === "signin" ? "Sign in" : "Sign up"}
             </Button>
@@ -145,7 +169,11 @@ function AuthPage() {
               {mode === "signin" ? "Create account" : "Have an account? Sign in"}
             </button>
             {mode === "signin" && (
-              <button type="button" onClick={handleReset} className="text-muted-foreground underline-offset-4 hover:underline">
+              <button
+                type="button"
+                onClick={handleReset}
+                className="text-muted-foreground underline-offset-4 hover:underline"
+              >
                 Forgot password?
               </button>
             )}
