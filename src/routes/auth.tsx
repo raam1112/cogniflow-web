@@ -12,8 +12,8 @@ export const Route = createFileRoute("/auth")({
   ssr: false,
   head: () => ({
     meta: [
-      { title: "Sign in — CogniFlow" },
-      { name: "description", content: "Sign in or create an account to manage your tasks with CogniFlow." },
+      { title: "Sign in — TaskCore" },
+      { name: "description", content: "Sign in or create an account to manage your tasks with TaskCore." },
     ],
   }),
   component: AuthPage,
@@ -92,7 +92,7 @@ function AuthPage() {
             <CheckSquare className="h-6 w-6" />
           </div>
           <div>
-            <h1 className="font-display text-2xl font-bold tracking-tight text-foreground">COGNIFLOW</h1>
+            <h1 className="font-display text-2xl font-bold tracking-tight text-foreground">TASKCORE</h1>
             <p className="text-xs uppercase tracking-widest text-muted-foreground">Productivity Hub</p>
           </div>
         </div>
