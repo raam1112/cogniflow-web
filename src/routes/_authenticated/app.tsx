@@ -198,7 +198,7 @@ function Dashboard() {
           <div className="flex items-center gap-2">
             <Popover open={remOpen} onOpenChange={setRemOpen}>
               <PopoverTrigger asChild>
-                <Button variant="outline" size="icon" className="relative" title="Reminders">
+                <Button variant="outline" size="icon" className="relative" title="Reminders" aria-label="Reminders">
                   <Bell className="h-4 w-4" />
                   {reminders.length > 0 && (
                     <span className="absolute -right-1 -top-1 flex h-4 min-w-[16px] items-center justify-center rounded-full bg-destructive px-1 text-[10px] font-bold text-destructive-foreground">
@@ -261,13 +261,13 @@ function Dashboard() {
                 )}
               </PopoverContent>
             </Popover>
-            <Button variant="outline" size="icon" onClick={() => setChatOpen(true)} title="AI Assistant">
+            <Button variant="outline" size="icon" onClick={() => setChatOpen(true)} title="AI Assistant" aria-label="AI Assistant">
               <Bot className="h-4 w-4" />
             </Button>
-            <Button variant="outline" size="icon" onClick={toggleTheme} title="Toggle theme">
+            <Button variant="outline" size="icon" onClick={toggleTheme} title="Toggle theme" aria-label="Toggle theme">
               {theme === "dark" ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
             </Button>
-            <Button variant="outline" size="icon" onClick={signOut} title="Sign out">
+            <Button variant="outline" size="icon" onClick={signOut} title="Sign out" aria-label="Sign out">
               <LogOut className="h-4 w-4" />
             </Button>
           </div>
