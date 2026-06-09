@@ -14,6 +14,8 @@ export const Route = createFileRoute("/auth")({
     meta: [
       { title: "Sign in — CogniFlow" },
       { name: "description", content: "Sign in or create an account to manage your tasks with CogniFlow." },
+      { property: "og:title", content: "Sign in — CogniFlow" },
+      { property: "og:description", content: "Sign in or create an account to manage your tasks with CogniFlow." },
     ],
   }),
   component: AuthPage,
