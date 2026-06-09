@@ -159,6 +159,48 @@ function Dashboard() {
             <Badge variant="outline" className="ml-2 hidden border-brand text-brand sm:inline-flex">System Active</Badge>
           </div>
           <div className="flex items-center gap-2">
+            <Popover open={remOpen} onOpenChange={setRemOpen}>
+              <PopoverTrigger asChild>
+                <Button variant="outline" size="icon" className="relative" title="Reminders">
+                  <Bell className="h-4 w-4" />
+                  {reminders.length > 0 && (
+                    <span className="absolute -right-1 -top-1 flex h-4 min-w-[16px] items-center justify-center rounded-full bg-destructive px-1 text-[10px] font-bold text-destructive-foreground">
+                      {reminders.length}
+                    </span>
+                  )}
+                </Button>
+              </PopoverTrigger>
+              <PopoverContent align="end" className="w-80 border-2 border-border bg-card p-0">
+                <div className="flex items-center justify-between border-b-2 border-border px-3 py-2">
+                  <span className="text-xs font-bold uppercase tracking-widest">Reminders</span>
+                  {reminders.length > 0 && (
+                    <button className="text-xs text-muted-foreground hover:text-foreground" onClick={() => { reminders.forEach((r) => dismiss(r.id)); setRemOpen(false); }}>
+                      Dismiss all
+                    </button>
+                  )}
+                </div>
+                {reminders.length === 0 ? (
+                  <div className="px-3 py-4 text-sm text-muted-foreground">No urgent deadlines.</div>
+                ) : (
+                  <ul className="max-h-72 overflow-auto">
+                    {reminders.map((t) => (
+                      <li key={t.id} className="flex items-start gap-2 border-b border-border px-3 py-2 last:border-b-0">
+                        <div className={`mt-1 h-2 w-2 shrink-0 rounded-full ${isOverdue(t) ? "bg-destructive" : "bg-brand"}`} />
+                        <button className="flex-1 text-left text-sm" onClick={() => { setEditing(t); setModalOpen(true); setRemOpen(false); }}>
+                          <span className="font-medium">{t.title}</span>
+                          <div className="mt-0.5 text-xs text-muted-foreground">
+                            {isOverdue(t) ? "Overdue" : "Due soon"} · {format(new Date(t.due_date || 0), "MMM d, HH:mm")}
+                          </div>
+                        </button>
+                        <button className="text-muted-foreground hover:text-foreground" onClick={() => dismiss(t.id)} title="Dismiss">
+                          <X className="h-3.5 w-3.5" />
+                        </button>
+                      </li>
+                    ))}
+                  </ul>
+                )}
+              </PopoverContent>
+            </Popover>
             <Button variant="outline" size="icon" onClick={() => setChatOpen(true)} title="AI Assistant">
               <Bot className="h-4 w-4" />
             </Button>
