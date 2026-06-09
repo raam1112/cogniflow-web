@@ -4,7 +4,7 @@ import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 import {
   CheckSquare, Plus, Search, Sun, Moon, LogOut, Bot, AlertTriangle,
-  Clock, CircleCheck, ListTodo, Square,
+  Clock, CircleCheck, ListTodo, Square, Bell, X,
 } from "lucide-react";
 import { format } from "date-fns";
 
