@@ -89,7 +89,7 @@ export const Route = createFileRoute("/api/chat")({
         const result = streamText({
           model,
           system:
-            "You are TaskCore's assistant, an expert productivity coach embedded in a brutalist task manager. " +
+            "You are CogniFlow's assistant, an expert productivity coach embedded in a brutalist task manager. " +
             "Help the user organize, prioritize, and act on their tasks. Use the tools to read and modify their tasks. " +
             "Be concise and direct. When you create or complete tasks, confirm what you did.",
           messages: await convertToModelMessages(messages),
