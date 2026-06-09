@@ -88,7 +88,8 @@ export const Route = createFileRoute("/api/chat")({
               const { error } = await supabase
                 .from("tasks")
                 .update({ status: "done", completed_at: new Date().toISOString() })
-                .eq("id", id);
+                .eq("id", id)
+                .eq("user_id", uid);
               if (error) return { error: error.message };
               return { ok: true };
             },
