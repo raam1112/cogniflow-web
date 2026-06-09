@@ -29,7 +29,7 @@ import {
 } from "@/components/ui/popover";
 
 export const Route = createFileRoute("/_authenticated/app")({
-  head: () => ({ meta: [{ title: "Dashboard — TaskCore" }] }),
+  head: () => ({ meta: [{ title: "Dashboard — CogniFlow" }] }),
   component: Dashboard,
 });
 
@@ -155,7 +155,7 @@ function Dashboard() {
             <div className="flex h-9 w-9 items-center justify-center bg-brand text-brand-foreground">
               <CheckSquare className="h-5 w-5" />
             </div>
-            <span className="font-display text-lg font-bold tracking-tight">TASKCORE</span>
+            <span className="font-display text-lg font-bold tracking-tight">COGNIFLOW</span>
             <Badge variant="outline" className="ml-2 hidden border-brand text-brand sm:inline-flex">System Active</Badge>
           </div>
           <div className="flex items-center gap-2">
