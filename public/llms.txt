@@ -1,0 +1,14 @@
+# CogniFlow
+
+> CogniFlow is a smart, AI-powered task manager that helps you organize, track, and manage your daily tasks with deadline reminders and an AI assistant.
+
+CogniFlow is a lightweight productivity hub. Users create tasks with priorities, categories, subtasks, and due dates, get in-app deadline reminders, and use an AI assistant to organize their work.
+
+## Pages
+
+- [Home](/): Overview of CogniFlow and entry point to the app.
+- [Sign in](/auth): Sign in or create a CogniFlow account.
+
+## Optional
+
+- [AI productivity tools guide](/blog/ai-productivity-tools): How AI streamlines task management workflows.
