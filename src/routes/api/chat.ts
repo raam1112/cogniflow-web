@@ -22,8 +22,23 @@ export const Route = createFileRoute("/api/chat")({
         const key = process.env.LOVABLE_API_KEY;
         if (!key) return new Response("Missing LOVABLE_API_KEY", { status: 500 });
 
-        const { messages } = (await request.json()) as { messages?: UIMessage[] };
-        if (!Array.isArray(messages)) return new Response("Messages required", { status: 400 });
+        const bodySchema = z.object({
+          messages: z
+            .array(
+              z.object({
+                id: z.string(),
+                role: z.enum(["user", "assistant", "system"]),
+                parts: z
+                  .array(z.object({ type: z.string() }).passthrough())
+                  .max(50),
+              }).passthrough(),
+            )
+            .min(1)
+            .max(100),
+        });
+        const parsed = bodySchema.safeParse(await request.json());
+        if (!parsed.success) return new Response("Invalid body", { status: 400 });
+        const messages = parsed.data.messages as unknown as UIMessage[];
 
         const supabase = getUserClient(token);
         const { data: userData } = await supabase.auth.getUser();
@@ -73,7 +88,8 @@ export const Route = createFileRoute("/api/chat")({
               const { error } = await supabase
                 .from("tasks")
                 .update({ status: "done", completed_at: new Date().toISOString() })
-                .eq("id", id);
+                .eq("id", id)
+                .eq("user_id", uid);
               if (error) return { error: error.message };
               return { ok: true };
             },
