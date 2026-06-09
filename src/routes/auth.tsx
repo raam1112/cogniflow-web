@@ -91,14 +91,16 @@ function AuthPage() {
   };
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-background px-4 py-12">
+    <main className="flex min-h-screen items-center justify-center bg-background px-4 py-12">
       <div className="w-full max-w-md">
         <div className="mb-8 flex items-center gap-3">
           <div className="flex h-11 w-11 items-center justify-center bg-brand text-brand-foreground btn-brutal">
             <CheckSquare className="h-6 w-6" />
           </div>
           <div>
-            <h1 className="font-display text-2xl font-bold tracking-tight text-foreground">COGNIFLOW</h1>
+            <h1 className="font-display text-2xl font-bold tracking-tight text-foreground">
+              Sign in to CogniFlow — Your AI Productivity Hub
+            </h1>
             <p className="text-xs uppercase tracking-widest text-muted-foreground">Productivity Hub</p>
           </div>
         </div>
