@@ -92,7 +92,7 @@ function AuthPage() {
             <CheckSquare className="h-6 w-6" />
           </div>
           <div>
-            <h1 className="font-display text-2xl font-bold tracking-tight text-foreground">TASKCORE</h1>
+            <h1 className="font-display text-2xl font-bold tracking-tight text-foreground">COGNIFLOW</h1>
             <p className="text-xs uppercase tracking-widest text-muted-foreground">Productivity Hub</p>
           </div>
         </div>
