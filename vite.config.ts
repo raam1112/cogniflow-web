@@ -12,4 +12,10 @@ export default defineConfig({
     // nitro/vite builds from this
     server: { entry: "server" },
   },
+  // The Lovable config wrapper already includes the nitro/vite plugin — do NOT
+  // add a second `nitro()` plugin manually (it breaks with duplicate plugins).
+  // Force nitro on and pin the Vercel preset for self-deploys to Vercel.
+  // Note: inside a Lovable build the preset is forced to Cloudflare; this
+  // `vercel` preset applies when you build/deploy from your own Vercel CI.
+  nitro: { preset: "vercel" },
 });
